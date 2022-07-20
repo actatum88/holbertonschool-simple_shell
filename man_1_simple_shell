@@ -1,0 +1,20 @@
+.\" Manpage for simple shell
+.\" Contact Alexandra Tatum or Conner Curtis to correct errors or typos.
+.TH man 8 "July 29, 2022" "simple shell man page"
+.SH NAME
+Simple Shell
+.SH SYNOPSIS
+
+.SH DESCRIPTION
+A simple shell of a command line interpreter that reads, interprets, then executes a command.
+.SH OPTIONS
+
+.SH SEE ALSO
+
+.SH BUGS
+No known bugs.
+
+.SH EXAMPLES
+
+.SH AUTHORS
+Alexandra Tatum & Conner Curtis
