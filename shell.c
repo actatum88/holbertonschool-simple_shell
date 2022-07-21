@@ -27,4 +27,13 @@ int main (void)
 			break; */
 		}
 	}
+
+char clear(void)
+	{
+		write(e[H/e[2Je[3J);
+		return(0);
+/*move the cursor to the top left corner*/
+/*clear the screen, and clear the scrollback buffer/*
+/*clears the terminal text , return 0 on success, -1 for error.*/
+	}
 }
