@@ -8,5 +8,6 @@
 #include <assert.h>
 
 extern int execle (const char *__path, const char *__arg, ...);
+int main(int ac, char **av, char **env);
 
 #endif
