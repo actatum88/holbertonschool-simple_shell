@@ -15,19 +15,48 @@ int main (void)
 	{
 		printf("($) ");
 
-		getline(&buffer, &bufsize, stdin);
+		if (getline(&buffer, &bufsize, stdin) == 1)
+			continue;
 
 		if (strcmp(buffer, "exit\n") == 0)
 			break;
 		else
 		{
-			printf("Got to the command section!");
-			/*command = make_av(buffer);
+			command = make_av(buffer);
 			if (execute(command) == -1)
-			break; */
+			break;
 		}
 	}
+	free(buffer);
+	free(av);
+
+	return (0);
 }
+
+int execute(char **command)
+{
+	pid_t is_kid;
+
+	is_kid = fork();
+
+	if (is_kid != 0)
+	{
+		wait(NULL);
+		return (0);
+	}
+	if (is_kid == 0)
+	{
+		if (execve(command[0], command, NULL) == -1)
+		{
+			perror("Error: ");
+			return (-1);
+		}
+	}
+
+	return (0);
+}
+
+
 char clear(void)
 	{
 	return(0);
@@ -77,3 +106,15 @@ char **p_strtok(char* a_str, char delim)
 			}
 			return (result);
 		}
+void print_array(char **array)
+{
+	int i = 0;
+
+	while (array[i] != NULL)
+	{
+		printf("$s\n", array[i]);
+		i++;
+	}
+	if (array[i] == NULL)
+		printf("NULL\n");
+}
