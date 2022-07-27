@@ -10,6 +10,7 @@ int main (void)
 	char *buffer = NULL;
 	char **command;
 	size_t bufsize = 0;
+	int builtinrun;
 
 	while(1)
 	{
@@ -17,18 +18,16 @@ int main (void)
 
 		if (getline(&buffer, &bufsize, stdin) == 1)
 			continue;
-
-		if (strcmp(buffer, "exit\n") == 0)
+		command = make_av(buffer);
+		if (execute(command) == -1)
 			break;
-		else
-		{
-			command = make_av(buffer);
-			if (execute(command) == -1)
+		builtinrun = builtinchecker(command);
+		if (builtinrun == 0)
+			continue;
+		if (builtinrun == -1)
 			break;
-		}
 	}
 	free(buffer);
-	free(av);
 
 	return (0);
 }
@@ -56,13 +55,33 @@ int execute(char **command)
 	return (0);
 }
 
+char **make_av(char *str)
+{
+	char **toks;
+	char *tok;
+	unsigned int i;
+
+	toks = malloc(sizeof(char) * BUFFER);
+	if (toks == NULL)
+		exit(-1);
+	tok = strtok(str, "\n\t\r ");
+
+	for (i = 0; tok != NULL; i++)
+	{
+		toks[i] = tok;
+		tok = strtok(NULL, "\n\t\r ");
+	}
+	toks[i] = NULL;
+	return (toks);
+}
+
 
 char clear(void)
 	{
 	return(0);
-/*move the cursor to the top left corner*/
-/*clear the screen, and clear the scrollback buffer/*
-/*clears the terminal text , return 0 on success, -1 for error.*/
+/* move the cursor to the top left corner */
+/* clear the screen, and clear the scrollback buffer */
+/* clears the terminal text , return 0 on success, -1 for error. */
 	}
 
 
@@ -88,7 +107,7 @@ char **p_strtok(char* a_str, char delim)
 /* Add space for trailing token. */
 			count += last_comma < (a_str + strlen(a_str) - 1);
 			count++;
-/*Add space for terminating null string*/
+/* Add space for terminating null string */
 
 			result = malloc(sizeof(char*) * count);
 			if (result)
@@ -112,7 +131,7 @@ void print_array(char **array)
 
 	while (array[i] != NULL)
 	{
-		printf("$s\n", array[i]);
+		printf("%s\n", array[i]);
 		i++;
 	}
 	if (array[i] == NULL)
