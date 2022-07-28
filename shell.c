@@ -39,9 +39,12 @@ int main (void)
 			break;
 		if (execute(command) == -1)
 		{
+			free(buffer);
+			free(command);
 			perror("Error");
 			exit(EXIT_FAILURE);
 		}
+		free(command);
 	}
 	free(buffer);
 	free(command);
@@ -59,6 +62,7 @@ int execute(char **command)
 	{
 		if (execvp(command[0], command) == -1)
 			perror("Error");
+	free(command);
 	exit(EXIT_FAILURE);
 	}
 	else if (is_kid < 0)
