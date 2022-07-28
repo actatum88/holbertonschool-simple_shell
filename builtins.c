@@ -55,5 +55,5 @@ int _printenv(void)
 
 int _myexit(void)
 {
-	return (-1);
+	return (0);
 }

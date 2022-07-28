@@ -8,6 +8,7 @@
 #include <string.h>
 #include <assert.h>
 #include <sys/wait.h>
+#include <sys/types.h>
 
 typedef struct builtins
 {

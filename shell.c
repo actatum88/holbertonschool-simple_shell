@@ -16,14 +16,22 @@ int main (void)
 	{
 		printf("($) ");
 
-		if (getline(&buffer, &bufsize, stdin) == 1)
-			continue;
+		if (getline(&buffer, &bufsize, stdin) == -1)
+		{
+			if (feof(stdin))
+				exit(EXIT_SUCCESS);
+			else
+			{
+				perror("Error");
+				exit(EXIT_FAILURE);
+			}
+		}
 		command = make_av(buffer);
 		if (execute(command) == -1)
 			break;
 		builtinrun = builtinchecker(command);
 		if (builtinrun == 0)
-			continue;
+			break;
 		if (builtinrun == -1)
 			break;
 	}
@@ -35,24 +43,26 @@ int main (void)
 int execute(char **command)
 {
 	pid_t is_kid;
+	int status;
 
 	is_kid = fork();
 
-	if (is_kid != 0)
+	if (is_kid == 0)
 	{
-		wait(NULL);
-		return (0);
+		if (execvp(command[0], command) == -1)
+			perror("Error");
+	exit(EXIT_FAILURE);
 	}
-/*	if (is_kid == 0)
+	else if (is_kid < 0)
+		perror("Error");
+	else
 	{
-		if (execve(command[0], command, NULL) == -1)
+		do
 		{
-			perror("Error: ");
-			return (-1);
-		}
+			waitpid(is_kid, &status, WUNTRACED);
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
-*/
-	return (0);
+	return (1);
 }
 
 char **make_av(char *str)
@@ -63,7 +73,7 @@ char **make_av(char *str)
 
 	toks = malloc(sizeof(char) * BUFFER);
 	if (toks == NULL)
-		exit(-1);
+		exit(EXIT_FAILURE);
 	tok = strtok(str, "\n\t\r ");
 
 	for (i = 0; tok != NULL; i++)
