@@ -19,7 +19,10 @@ int main (void)
 		if (getline(&buffer, &bufsize, stdin) == -1)
 		{
 			if (feof(stdin))
+			{
+				printf("\n");
 				exit(EXIT_SUCCESS);
+			}
 			else
 			{
 				perror("Error");
@@ -36,7 +39,7 @@ int main (void)
 			break;
 	}
 	free(buffer);
-
+	free(command);
 	return (0);
 }
 
@@ -73,7 +76,11 @@ char **make_av(char *str)
 
 	toks = malloc(sizeof(char) * BUFFER);
 	if (toks == NULL)
+	{
+		free(toks);
+		perror("Error");
 		exit(EXIT_FAILURE);
+	}
 	tok = strtok(str, "\n\t\r ");
 
 	for (i = 0; tok != NULL; i++)
