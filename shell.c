@@ -20,11 +20,13 @@ int main (void)
 		{
 			if (feof(stdin))
 			{
+				free(buffer);
 				printf("\n");
 				exit(EXIT_SUCCESS);
 			}
 			else
 			{
+				free(buffer);
 				perror("Error");
 				exit(EXIT_FAILURE);
 			}
@@ -36,7 +38,10 @@ int main (void)
 		if (builtinrun == -1)
 			break;
 		if (execute(command) == -1)
-			break;
+		{
+			perror("Error");
+			exit(EXIT_FAILURE);
+		}
 	}
 	free(buffer);
 	free(command);
