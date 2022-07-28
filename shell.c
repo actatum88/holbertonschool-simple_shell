@@ -30,12 +30,12 @@ int main (void)
 			}
 		}
 		command = make_av(buffer);
-		if (execute(command) == -1)
-			break;
 		builtinrun = builtinchecker(command);
 		if (builtinrun == 0)
 			break;
 		if (builtinrun == -1)
+			break;
+		if (execute(command) == -1)
 			break;
 	}
 	free(buffer);
