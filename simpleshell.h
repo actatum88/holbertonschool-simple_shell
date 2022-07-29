@@ -16,6 +16,10 @@ typedef struct builtins
 	int (*f)(void);
 } builtins_t;
 
+int _strlen(char *s);
+char *_getenv(const char *name);
+char *_getline(FILE *fp);
+int _strcmp(char *s1, char *s2);
 char **make_av(char *str);
 int _myexit(void);
 int _printenv(void);

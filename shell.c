@@ -7,47 +7,38 @@
 
 int main (void)
 {
-	char *buffer = NULL;
+	char *line;
 	char **command;
-	size_t bufsize = 0;
 	int builtinrun;
+	/*int child;*/
 
 	while(1)
 	{
-		printf("($) ");
-
-		if (getline(&buffer, &bufsize, stdin) == -1)
+		if (isatty(STDIN_FILENO) == 1)
+			write(1, "($) ", 4);
+		line = _getline(stdin);
+		if (line[0] == '\0')
 		{
-			if (feof(stdin))
-			{
-				free(buffer);
-				printf("\n");
-				exit(EXIT_SUCCESS);
-			}
-			else
-			{
-				free(buffer);
+			free(line);
+			continue;
+		}	
+		command = make_av(line);
+		builtinrun = builtinchecker(command);
+		if (builtinrun == 0 || builtinrun == -1)
+		{
+			free(line);
+			free(command);
+			_exit(EXIT_SUCCESS);
+		}
+		/*child = execute(command);
+		if (child == -1)
+		{
 				perror("Error");
 				exit(EXIT_FAILURE);
-			}
-		}
-		command = make_av(buffer);
-		builtinrun = builtinchecker(command);
-		if (builtinrun == 0)
-			break;
-		if (builtinrun == -1)
-			break;
-		if (execute(command) == -1)
-		{
-			free(buffer);
-			free(command);
-			perror("Error");
-			exit(EXIT_FAILURE);
-		}
+		} */
+		free(line);
 		free(command);
 	}
-	free(buffer);
-	free(command);
 	return (0);
 }
 
@@ -55,13 +46,14 @@ int execute(char **command)
 {
 	pid_t is_kid;
 	int status;
+	char **envp = environ;
 
 	is_kid = fork();
 
 	if (is_kid == 0)
 	{
-		if (execvp(command[0], command) == -1)
-			perror("Error");
+		if (execve(command[0], command, envp) == -1)
+			return (-1);
 	free(command);
 	exit(EXIT_FAILURE);
 	}
@@ -86,7 +78,6 @@ char **make_av(char *str)
 	toks = malloc(sizeof(char) * BUFFER);
 	if (toks == NULL)
 	{
-		free(toks);
 		perror("Error");
 		exit(EXIT_FAILURE);
 	}
@@ -99,4 +90,20 @@ char **make_av(char *str)
 	}
 	toks[i] = NULL;
 	return (toks);
+}
+
+char *_getline(FILE *fp)
+{
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
+
+	read = getline(&line, &len, fp);
+	if ( read == -1)
+	{
+		write(1, "\n", 1);
+		free(line);
+		exit(EXIT_SUCCESS);
+	}
+	return (line);
 }
