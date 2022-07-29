@@ -5,14 +5,14 @@
  * ac - number of items in av
  */
 
-int main (void)
+int main(void)
 {
 	char *line;
 	char **command;
 	int builtinrun;
 	/*int child;*/
 
-	while(1)
+	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
 			write(1, "($) ", 4);
@@ -61,8 +61,7 @@ int execute(char **command)
 		perror("Error");
 	else
 	{
-		do
-		{
+		do {
 			waitpid(is_kid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
