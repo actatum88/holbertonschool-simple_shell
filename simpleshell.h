@@ -16,6 +16,7 @@ typedef struct builtins
 	int (*f)(void);
 } builtins_t;
 
+int _putchar(char c);
 int _strlen(char *s);
 char *_getenv(const char *name);
 char *_getline(FILE *fp);

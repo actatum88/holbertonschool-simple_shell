@@ -18,7 +18,7 @@ int builtinchecker(char **toks)
 	num = numbuilt(builtin);
 	for (i = 0; i < num; i++)
 	{
-		if (strcmp(toks[0], builtin[i].option) == 0)
+		if (_strcmp(*toks, builtin[i].option) == 0)
 		{
 			status = (builtin[i].f)();
 			return (status);
@@ -49,7 +49,8 @@ int _printenv(void)
 	int i;
 
 	for (i = 0; environ[i] != NULL; i++)
-		printf("%s\n", environ[i]);
+		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
+	_putchar('\n');
 	return (1);
 }
 

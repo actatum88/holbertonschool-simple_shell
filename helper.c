@@ -44,3 +44,8 @@ char *_getenv(const char *name)
 	}
 	return (NULL);
 }
+
+int _putchar(char c)
+{
+	return (write(1, &c, 1));
+}

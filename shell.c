@@ -14,13 +14,14 @@ int main(void)
 
 	while (1)
 	{
+loop:
 		if (isatty(STDIN_FILENO) == 1)
 			write(1, "($) ", 4);
 		line = _getline(stdin);
 		if (line[0] == '\0')
 		{
 			free(line);
-			continue;
+			goto loop;
 		}	
 		command = make_av(line);
 		builtinrun = builtinchecker(command);
