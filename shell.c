@@ -10,7 +10,7 @@ int main(void)
 	char *line;
 	char **command;
 	int builtinrun;
-	/*int child;*/
+	int child;
 
 	while (1)
 	{
@@ -30,12 +30,12 @@ int main(void)
 			free(command);
 			_exit(EXIT_SUCCESS);
 		}
-		/*child = execute(command);
+		child = execute(command);
 		if (child == -1)
 		{
 				perror("Error");
 				exit(EXIT_FAILURE);
-		} */
+		}
 		free(line);
 		free(command);
 	}
@@ -46,13 +46,12 @@ int execute(char **command)
 {
 	pid_t is_kid;
 	int status;
-	char **envp = environ;
 
 	is_kid = fork();
 
 	if (is_kid == 0)
 	{
-		if (execve(command[0], command, envp) == -1)
+		if (execve(command[0], command, NULL) == -1)
 			return (-1);
 	free(command);
 	exit(EXIT_FAILURE);
