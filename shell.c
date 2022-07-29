@@ -5,14 +5,14 @@
  * ac - number of items in av
  */
 
-int main (void)
+int main(void)
 {
 	char *buffer = NULL;
 	char **command;
 	size_t bufsize = 0;
 	int builtinrun;
 
-	while(1)
+	while (1)
 	{
 		printf("($) ");
 
@@ -69,8 +69,7 @@ int execute(char **command)
 		perror("Error");
 	else
 	{
-		do
-		{
+		do {
 			waitpid(is_kid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
