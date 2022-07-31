@@ -10,12 +10,21 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
+/**
+ * struct builtins - list of builtins
+ * @option: bulitin option
+ * @f: function for builtin
+ * Description: list of builtins with their executable functions
+ */
+
 typedef struct builtins
 {
 	char *option;
 	int (*f)(void);
 } builtins_t;
 
+void _strcat(char **dest, char *src);
+void _strcpy(char **dest, char *src);
 int _putchar(char c);
 int _strlen(char *s);
 char *_getenv(const char *name);
@@ -25,10 +34,6 @@ char **make_av(char *str);
 int _myexit(void);
 int _printenv(void);
 int execute(char **command);
-char clear(void);
-char **p_strtok(char* a_str, char delim);
-void print_array(char **array);
-extern int execle(const char *__path, const char *__arg, ...);
 int main(void);
 int builtinchecker(char **toks);
 int numbuilt(builtins_t builtin[]);
