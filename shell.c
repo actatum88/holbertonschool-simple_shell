@@ -1,8 +1,8 @@
 #include "simpleshell.h"
 
 /**
- * av - NULL terminated array of strings
- * ac - number of items in av
+ * main - core function of the shell
+ * Return: 0
  */
 
 int main(void)
@@ -10,19 +10,17 @@ int main(void)
 	char *line;
 	char **command;
 	int builtinrun;
-	int child;
 
 	while (1)
 	{
-loop:
 		if (isatty(STDIN_FILENO) == 1)
 			write(1, "($) ", 4);
 		line = _getline(stdin);
-		if (line[0] == '\0')
+		if (line[0] == '\n')
 		{
 			free(line);
-			goto loop;
-		}	
+			continue;
+		}
 		command = make_av(line);
 		builtinrun = builtinchecker(command);
 		if (builtinrun == 0 || builtinrun == -1)
@@ -31,31 +29,46 @@ loop:
 			free(command);
 			_exit(EXIT_SUCCESS);
 		}
-		child = execute(command);
-		if (child == -1)
+		/* if (execute(command) == -1)
 		{
-				perror("Error");
-				exit(EXIT_FAILURE);
-		}
+			free(line);
+			free(command);
+			perror("Error");
+			exit(EXIT_FAILURE);
+		}*/
 		free(line);
 		free(command);
 	}
+	free(command);
 	return (0);
 }
+
+/**
+ * execute - fork function that creates child
+ * @command: command the function receives to be executed
+ * Return: 1 on success or EXIT on failure.
+ */
 
 int execute(char **command)
 {
 	pid_t is_kid;
 	int status;
+	/* char **envp == environ; */
+	int i = 0;
 
 	is_kid = fork();
 
+	if (command[i] == NULL)
+		return (1);
 	if (is_kid == 0)
 	{
-		if (execve(command[0], command, NULL) == -1)
-			return (-1);
-	free(command);
-	exit(EXIT_FAILURE);
+		if (execve(command[i], command, NULL) == -1)
+		{
+			free(command);
+			perror("Error");
+			exit(EXIT_FAILURE);
+		}
+
 	}
 	else if (is_kid < 0)
 		perror("Error");
@@ -67,6 +80,13 @@ int execute(char **command)
 	}
 	return (1);
 }
+
+/**
+ * make_av - creates an argument variable to be passed into the
+ * builtin checker
+ * @str: the received command from stdin to tokenized into an arg
+ * Return: argument token
+ */
 
 char **make_av(char *str)
 {
@@ -91,6 +111,12 @@ char **make_av(char *str)
 	return (toks);
 }
 
+/**
+ * _getline - custom getline function to receive input from stdin
+ * @fp: file pointer that points to stdin
+ * Return: the read line from stdin.
+ */
+
 char *_getline(FILE *fp)
 {
 	char *line = NULL;
@@ -98,10 +124,9 @@ char *_getline(FILE *fp)
 	ssize_t read;
 
 	read = getline(&line, &len, fp);
-	if ( read == -1)
+	if (read == -1)
 	{
 		write(1, "\n", 1);
-		free(line);
 		exit(EXIT_SUCCESS);
 	}
 	return (line);

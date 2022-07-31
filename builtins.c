@@ -1,5 +1,11 @@
 #include "simpleshell.h"
 
+/**
+ * builtinchecker - takes in a token to check against struct builtins
+ * if there is a match it will execute the function
+ * @toks: token to be checked
+ * Return: 1 on success.
+ */
 
 int builtinchecker(char **toks)
 {
@@ -15,6 +21,8 @@ int builtinchecker(char **toks)
 
 	if (toks[0] == NULL)
 		return (1);
+	if (*toks[0] == '\0')
+		return (1);
 	num = numbuilt(builtin);
 	for (i = 0; i < num; i++)
 	{
@@ -28,6 +36,12 @@ int builtinchecker(char **toks)
 
 }
 
+/**
+ * numbuilt - counts the number of builtins
+ * @builtin: builts to count
+ * Return: number of builtins to iterate through
+ */
+
 int numbuilt(builtins_t builtin[])
 {
 	unsigned int i;
@@ -38,10 +52,9 @@ int numbuilt(builtins_t builtin[])
 }
 
 
-/*
- * _printenv
- *@
- *Return:
+/**
+ * _printenv - prints the environ global variable
+ * Return: 1 on success.
  */
 
 int _printenv(void)
@@ -49,10 +62,17 @@ int _printenv(void)
 	int i;
 
 	for (i = 0; environ[i] != NULL; i++)
+	{
 		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
-	_putchar('\n');
+		_putchar('\n');
+	}
 	return (1);
 }
+
+/**
+ * _myexit - exit function that returns 0 to break main.
+ * Return: 0
+ */
 
 int _myexit(void)
 {
