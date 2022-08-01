@@ -1,5 +1,5 @@
 # About:
-This is a group project for Holberton School Tulsa, OK to write a simple Unix command interpreter for Holberton School Tulsa, OK. Alexandra Tatum and Conner Curtis were group partners for the project on July 29th, 2022.
+This is a group project for Holberton School Tulsa, OK to write a simple Unix command interpreter for Holberton School Tulsa, OK. Friday, July 29th, 2022.
 
 ## Tasks:
 ### Write a UNIX command line interpreter.
