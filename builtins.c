@@ -20,9 +20,9 @@ int builtinchecker(char **toks)
 	};
 
 	if (toks[0] == NULL)
-		return (1);
+		return (0);
 	if (*toks[0] == '\0')
-		return (1);
+		return (0);
 	num = numbuilt(builtin);
 	for (i = 0; i < num; i++)
 	{
@@ -32,7 +32,7 @@ int builtinchecker(char **toks)
 			return (status);
 		}
 	}
-	return (1);
+	return (0);
 
 }
 
@@ -76,5 +76,5 @@ int _printenv(void)
 
 int _myexit(void)
 {
-	return (0);
+	return (-1);
 }

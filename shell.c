@@ -9,7 +9,9 @@ int main(void)
 {
 	char *line;
 	char **command;
-	int builtinrun;
+	int builtinrun = 0;
+	int iSize;
+	char *trueline;
 
 	while (1)
 	{
@@ -21,21 +23,30 @@ int main(void)
 			free(line);
 			continue;
 		}
-		command = make_av(line);
+		iSize = _strlen(line);
+		trueline = malloc(iSize * sizeof(char));
+		_strcpy(line, trueline);
+		command = make_av(trueline);
 		builtinrun = builtinchecker(command);
-		if (builtinrun == 0 || builtinrun == -1)
+		if (builtinrun == -1)
 		{
+			free(trueline);
 			free(line);
 			free(command);
 			_exit(EXIT_SUCCESS);
 		}
-		/* if (execute(command) == -1)
+		if (builtinrun >= 1)
+			goto skip;
+		if (execute(command) == -1)
 		{
+			free(trueline);
 			free(line);
 			free(command);
 			perror("Error");
 			exit(EXIT_FAILURE);
-		}*/
+		}
+skip:
+		free(trueline);
 		free(line);
 		free(command);
 	}
@@ -54,15 +65,14 @@ int execute(char **command)
 	pid_t is_kid;
 	int status;
 	/* char **envp == environ; */
-	int i = 0;
 
 	is_kid = fork();
 
-	if (command[i] == NULL)
+	if (command[0] == NULL)
 		return (1);
 	if (is_kid == 0)
 	{
-		if (execve(command[i], command, NULL) == -1)
+		if (execve(command[0], command, NULL) == -1)
 		{
 			free(command);
 			perror("Error");
@@ -93,6 +103,7 @@ char **make_av(char *str)
 	char **toks;
 	char *tok;
 	unsigned int i;
+
 
 	toks = malloc(sizeof(char) * BUFFER);
 	if (toks == NULL)

@@ -23,8 +23,8 @@ typedef struct builtins
 	int (*f)(void);
 } builtins_t;
 
-void _strcat(char **dest, char *src);
-void _strcpy(char **dest, char *src);
+void _cpystr(char *str1, char **str2);
+void _strcpy(char *str1, char *str2);
 int _putchar(char c);
 int _strlen(char *s);
 char *_getenv(const char *name);
