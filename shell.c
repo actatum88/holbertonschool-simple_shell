@@ -23,32 +23,25 @@ int main(void)
 			free(line);
 			continue;
 		}
-		iSize = _strlen(line);
-		trueline = malloc(iSize * sizeof(char));
-		_strcpy(line, trueline);
-		command = make_av(trueline);
+		iSize = _strlen(line), trueline = malloc(iSize * sizeof(char));
+		_strcpy(line, trueline), free(line);
+		command = make_av(trueline), free(trueline);
 		builtinrun = builtinchecker(command);
 		if (builtinrun == -1)
 		{
-			free(trueline);
-			free(line);
-			free(command);
+			free(trueline), free(command);
 			_exit(EXIT_SUCCESS);
 		}
 		if (builtinrun >= 1)
 			goto skip;
 		if (execute(command) == -1)
 		{
-			free(trueline);
-			free(line);
-			free(command);
+			fflush(NULL);
 			perror("Error");
 			exit(EXIT_FAILURE);
 		}
 skip:
-		free(trueline);
-		free(line);
-		free(command);
+		fflush(NULL);
 	}
 	free(command);
 	return (0);
@@ -88,6 +81,7 @@ int execute(char **command)
 			waitpid(is_kid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
+	free(command);
 	return (1);
 }
 
@@ -103,6 +97,7 @@ char **make_av(char *str)
 	char **toks;
 	char *tok;
 	unsigned int i;
+	char delim[] = {' ', '\n'};
 
 
 	toks = malloc(sizeof(char) * BUFFER);
@@ -111,12 +106,12 @@ char **make_av(char *str)
 		perror("Error");
 		exit(EXIT_FAILURE);
 	}
-	tok = strtok(str, "\n\t\r ");
+	tok = strtok(str, delim);
 
 	for (i = 0; tok != NULL; i++)
 	{
 		toks[i] = tok;
-		tok = strtok(NULL, "\n\t\r ");
+		tok = strtok(NULL, delim);
 	}
 	toks[i] = NULL;
 	return (toks);

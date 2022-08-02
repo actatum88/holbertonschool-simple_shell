@@ -74,15 +74,3 @@ int _putchar(char c)
 {
 	return (write(1, &c, 1));
 }
-
-char *_strchr(char *str, int ch)
-{
-	for (;; str++)
-	{
-		if (*str == ch)
-			return str;
-		if (!*str)
-			return NULL;
-	}
-	return NULL;
-}
