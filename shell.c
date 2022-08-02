@@ -32,8 +32,8 @@ int main(void)
 		}
 		if (builtinrun == -1)
 		{
-			free(command);
 			free(line);
+			free(command);
 			_exit(errno);
 		}
 		if (builtinrun == 0)
@@ -137,12 +137,13 @@ char *_getline(FILE *fp)
 			exit(EXIT_SUCCESS);
 		}
 	}
-	else
+	if (isatty(STDIN_FILENO) != 1)
 	{
 		if (read == -1)
 		{
 			free(line);
 			exit(EXIT_SUCCESS);
+		
 		}
 	}
 	return (line);
