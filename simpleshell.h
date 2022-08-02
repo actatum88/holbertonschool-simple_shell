@@ -23,7 +23,6 @@ typedef struct builtins
 	int (*f)(void);
 } builtins_t;
 
-void _cpystr(char *str1, char **str2);
 void _strcpy(char *str1, char *str2);
 int _putchar(char c);
 int _strlen(char *s);
