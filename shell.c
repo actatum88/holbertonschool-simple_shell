@@ -5,13 +5,13 @@
  * Return: 0
  */
 
+char **attytok(char *str);
+
 int main(void)
 {
 	char *line;
 	char **command;
 	int builtinrun = 0;
-	int iSize;
-	char *trueline;
 
 	while (1)
 	{
@@ -23,29 +23,29 @@ int main(void)
 			free(line);
 			continue;
 		}
-		iSize = _strlen(line), trueline = malloc(iSize * sizeof(char));
-		_strcpy(line, trueline), free(line);
-		command = make_av(trueline);
+		command = make_av(line);
 		builtinrun = builtinchecker(command);
+		if (builtinrun >= 1)
+		{
+			free(line);
+			free(command);
+		}
 		if (builtinrun == -1)
 		{
-			free(trueline), free(command);
-			_exit(EXIT_SUCCESS);
+			free(command);
+			free(line);
+			_exit(errno);
 		}
-		if (builtinrun >= 1)
-			goto skip;
-		if (execute(command) == -1)
+		if (builtinrun == 0)
 		{
-			free(trueline);
-			fflush(NULL);
-			perror("Error");
-			exit(EXIT_FAILURE);
+			if (execute(command) == -1)
+			{
+				free(line);
+				perror("Error");
+				exit(EXIT_FAILURE);
+			}
 		}
-skip:
-		free(trueline);
-		fflush(NULL);
 	}
-	free(command);
 	return (0);
 }
 
@@ -61,10 +61,9 @@ int execute(char **command)
 	int status;
 	/* char **envp == environ; */
 
-	is_kid = fork();
-
 	if (command[0] == NULL)
 		return (1);
+	is_kid = fork();
 	if (is_kid == 0)
 	{
 		if (execve(command[0], command, NULL) == -1)
@@ -74,8 +73,7 @@ int execute(char **command)
 		}
 
 	}
-	else if (is_kid < 0)
-		perror("Error");
+
 	else
 	{
 		do {
@@ -100,7 +98,6 @@ char **make_av(char *str)
 	unsigned int i;
 	char delim[] = {' ', '\n'};
 
-
 	toks = malloc(sizeof(char) * BUFFER);
 	if (toks == NULL)
 	{
@@ -120,8 +117,8 @@ char **make_av(char *str)
 
 /**
  * _getline - custom getline function to receive input from stdin
- * @fp: file pointer that points to stdin
- * Return: the read line from stdin.
+ * @fp: file ptr that points to stdin
+ * Return: line from stdin
  */
 
 char *_getline(FILE *fp)
@@ -131,10 +128,22 @@ char *_getline(FILE *fp)
 	ssize_t read;
 
 	read = getline(&line, &len, fp);
-	if (read == -1)
+	if (isatty(STDIN_FILENO) == 1)
 	{
-		write(1, "\n", 1);
-		exit(EXIT_SUCCESS);
+		if (read == -1)
+		{
+			free(line);
+			write(1, "\n", 1);
+			exit(EXIT_SUCCESS);
+		}
+	}
+	else
+	{
+		if (read == -1)
+		{
+			free(line);
+			exit(EXIT_SUCCESS);
+		}
 	}
 	return (line);
 }

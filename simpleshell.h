@@ -9,6 +9,7 @@
 #include <assert.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <errno.h>
 
 /**
  * struct builtins - list of builtins
