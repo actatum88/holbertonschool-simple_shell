@@ -25,7 +25,7 @@ int main(void)
 		}
 		iSize = _strlen(line), trueline = malloc(iSize * sizeof(char));
 		_strcpy(line, trueline), free(line);
-		command = make_av(trueline), free(trueline);
+		command = make_av(trueline);
 		builtinrun = builtinchecker(command);
 		if (builtinrun == -1)
 		{
@@ -36,11 +36,13 @@ int main(void)
 			goto skip;
 		if (execute(command) == -1)
 		{
+			free(trueline);
 			fflush(NULL);
 			perror("Error");
 			exit(EXIT_FAILURE);
 		}
 skip:
+		free(trueline);
 		fflush(NULL);
 	}
 	free(command);
@@ -68,8 +70,7 @@ int execute(char **command)
 		if (execve(command[0], command, NULL) == -1)
 		{
 			free(command);
-			perror("Error");
-			exit(EXIT_FAILURE);
+			return (-1);
 		}
 
 	}
