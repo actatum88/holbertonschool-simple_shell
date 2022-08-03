@@ -12,11 +12,13 @@ int main(void)
 	char *line;
 	char **command;
 	int builtinrun = 0;
+	int write_var;
+	(void)write_var;
 
 	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
-			write(1, "($) ", 4);
+			write_var = write(1, "($) ", 4);
 		line = _getline(stdin);
 		if (line[0] == '\n')
 		{
@@ -126,6 +128,8 @@ char *_getline(FILE *fp)
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t read;
+	int write_var;
+	(void)write_var;
 
 	read = getline(&line, &len, fp);
 	if (isatty(STDIN_FILENO) == 1)
@@ -133,8 +137,9 @@ char *_getline(FILE *fp)
 		if (read == -1)
 		{
 			free(line);
-			write(1, "\n", 1);
+			write_var = write(1, "\n", 1);
 			exit(EXIT_SUCCESS);
+			return (0);
 		}
 	}
 	if (isatty(STDIN_FILENO) != 1)
@@ -143,7 +148,6 @@ char *_getline(FILE *fp)
 		{
 			free(line);
 			exit(EXIT_SUCCESS);
-		
 		}
 	}
 	return (line);

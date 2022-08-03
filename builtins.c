@@ -55,11 +55,14 @@ enum builtins_exec_status builtinchecker(char **tokens)
 enum builtins_exec_status _printenv(void)
 {
 	int i;
+	int write_var;
+	(void)write_var;
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
+		write_var = write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
 		_putchar('\n');
+		return (0);
 	}
 	return ExecStatusSuccess;
 }
