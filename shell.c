@@ -15,6 +15,8 @@ int main(void)
 
 	while (1)
 	{
+		if (line != NULL)
+			free(line);
 		if (isatty(STDIN_FILENO) == 1)
 			write_var = write(1, "($) ", 4);
 		line = _getline(stdin);
@@ -128,6 +130,7 @@ char *_getline(FILE *fp)
 	ssize_t read;
 	int write_var;
 	(void)write_var;
+
 
 	read = getline(&line, &len, fp);
 	if (isatty(STDIN_FILENO) == 1)
