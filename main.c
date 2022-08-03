@@ -11,12 +11,10 @@ int main(void)
 	char **command;
 	int builtinrun = 0;
 	int write_var;
-	int i = 0;
 	(void)write_var;
 
 	while (1)
 	{
-loop:
 		if (isatty(STDIN_FILENO) == 1)
 			write_var = write(1, "($) ", 4);
 		line = _getline(stdin);
@@ -24,15 +22,6 @@ loop:
 		{
 			free(line);
 			continue;
-		}
-		for (i = 0; line[i] != '\0'; i++)
-		{
-			if (line[i] == ' ')
-			{
-				free(line);
-				line = NULL;
-				goto loop;
-			}
 		}
 		command = make_av(line);
 		builtinrun = builtinchecker(command);
