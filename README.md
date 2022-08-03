@@ -4,6 +4,27 @@ This is a group project for Holberton School Tulsa, OK to write a simple Unix co
 ## Tasks:
 ### Write a UNIX command line interpreter.
 
+## Compilation:
+The simple shell is compiled using the following command:
+```sh
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o -g -O1 hsh
+
+OR
+
+./compile.sh
+```
+## Interactive Mode:
+The simple shell is initiated in interactive mode with the command:
+```sh
+./hsh
+$
+```
+## Non-Interactive Mode
+The simple shell is initiated in non-interactive mode with the command:
+```sh
+echo "/bin/ls" | ./HSH
+```
+
 Usage: simple_shell
 Your Shell should:
 
