@@ -7,12 +7,41 @@ Simple Shell
 
 .SH DESCRIPTION
 A simple shell of a command line interpreter that reads, interprets, then executes a command.
-.SH OPTIONS
 
-.SH SEE ALSO
+.SH RETURN VALUE
+Upon successful return, returns 0.
+Upon error, a different value is returned corresponding to the status of the program.
+
+.SH FILES
+main.c - Main file containing main functions. 
+.br
+simpleshell.h - Header file containing structs, function prototypes, library includes,
+and global variables
+.br
+builtins.c - List of builtin functions including: builtinchecker, _print env, _myexit
+.br
+helper.c - Contains misc helper code including: _putchar, strcmp, strlen, & _get env
+.br
+helper2.c - Additional code _strcpy
+.br
+
+.SH OPTIONS
+.Ar env
+- prints list of environment variables
+.br
+.Ar cd
+- Changes the the active directory
+.br
+.Ar clear
+- clears all previous output
+.br
+.Ar exit
+- exits the shell
+.br
 
 .SH BUGS
-No known bugs.
+This program is incomplete and unable to handle commands other than /bin/ls and env.
+Current memory leak issues. 8/3/2022
 
 .SH EXAMPLES
 
