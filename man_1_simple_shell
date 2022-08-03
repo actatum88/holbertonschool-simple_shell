@@ -1,9 +1,8 @@
-.\" Manpage for simple shell
+.\" Manpage for Simple Shell
 .\" Contact Alexandra Tatum or Conner Curtis to correct errors or typos.
-.TH man 8 "July 29, 2022" "simple shell man page"
+.TH man 8 "July 29, 2022" "Simple Shell man page"
 .SH NAME
 Simple Shell
-.SH SYNOPSIS
 
 .SH DESCRIPTION
 A simple shell of a command line interpreter that reads, interprets, then executes a command.
@@ -13,7 +12,7 @@ Upon successful return, returns 0.
 Upon error, a different value is returned corresponding to the status of the program.
 
 .SH FILES
-main.c - Main file containing main functions. 
+main.c - Main file containing main functions.
 .br
 simpleshell.h - Header file containing structs, function prototypes, library includes,
 and global variables
@@ -26,24 +25,58 @@ helper2.c - Additional code _strcpy
 .br
 
 .SH OPTIONS
-.Ar env
+env
 - prints list of environment variables
 .br
-.Ar cd
-- Changes the the active directory
-.br
-.Ar clear
-- clears all previous output
-.br
-.Ar exit
+exit
 - exits the shell
 .br
 
 .SH BUGS
 This program is incomplete and unable to handle commands other than /bin/ls and env.
+.br
 Current memory leak issues. 8/3/2022
 
 .SH EXAMPLES
+Shell should work in interactive mode:
 
+.br
+$ ./hsh
+.br
+($) /bin/ls
+.br
+hsh main.c shell.c
+.br
+($)
+.br
+($) exit
+.br
+$
+
+Also in non-interactive mode:
+
+.br
+$ echo "/bin/ls" | ./hsh
+.br
+hsh main.c shell.c test_ls_2
+.br
+$
+.br
+$ cat test_ls_2
+.br
+/bin/ls
+.br
+/bin/ls
+.br
+$
+.br
+$ cat test_ls_2 | ./hsh
+.br
+hsh main.c shell.c test_ls_2
+.br
+hsh main.c shell.c test_ls_2
+.br
+$
+.br
 .SH AUTHORS
 Alexandra Tatum & Conner Curtis
