@@ -9,10 +9,11 @@
 
 #define NUMBER_OF_BUILTINS 2
 
-// This is a list of the builtin functions. This list is in the static memory.
-// The NUMBER_OF_BUILTINS macro must be kept in sync with the number of functions
-// supported.
-builtins_t builtin[NUMBER_OF_BUILTINS] = { // Give me 8 bytes for a single point.
+/*This is a list of the builtin functions. List is in the static memory.*/
+/*NUMBER_OF_BUILTINS macro must be in sync with number of functions supported.*/
+
+builtins_t builtin[NUMBER_OF_BUILTINS] = {
+/*Give me 8 bytes for a single point. */
 	{"exit", _myexit},
 	{"env", _printenv},
 };
@@ -25,12 +26,13 @@ enum builtins_exec_status builtinchecker(char **tokens)
 	char* firstToken = tokens[0];
 
 	if (firstToken == NULL) {
-	  // The list of strings was empty, as the first string pointed to a null pointer.
+		/*The list of strings was empty, as the first string pointed to
+		  a null pointer.*/
 		return (0);
 	}
 
 	if (firstToken[0] == '\0') {
-		// The first string is empty.
+		/* The first string is empty. */
 		return (0);
 	}
 

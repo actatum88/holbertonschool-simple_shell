@@ -2,14 +2,14 @@
 #define SIMPLESHELL_H
 #define BUFFER 1024
 
+#include <assert.h>
+#include <errno.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
-#include <sys/wait.h>
 #include <sys/types.h>
-#include <errno.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 /**
  * struct builtins - list of builtins
@@ -18,10 +18,16 @@
  * Description: list of builtins with their executable functions
  */
 
-typedef struct builtins
-{
-	char *option;
-	int (*f)(void);
+/*Changing default values of enum constants*/
+enum builtins_exec_status {
+  ExecStatusNoop = 0,
+  ExecStatusSuccess = 1,
+  ExecStatusExit = -1
+};
+
+typedef struct builtins {
+  char *option;
+  enum builtins_exec_status (*f)(void);
 } builtins_t;
 
 void _strcpy(char *str1, char *str2);
