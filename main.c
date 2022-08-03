@@ -29,6 +29,7 @@ int main(void)
 		{
 			free(line);
 			free(command);
+			line = NULL;
 		}
 		if (builtinrun == -1)
 		{
@@ -41,10 +42,14 @@ int main(void)
 			if (execute(command) == -1)
 			{
 				free(line);
+				line = NULL;
 				perror("Error");
 				exit(EXIT_FAILURE);
 			}
 		}
+		if (line != NULL)
+			free(line);
+		
 	}
 	return (0);
 }
@@ -129,6 +134,9 @@ char *_getline(FILE *fp)
 	int write_var;
 	(void)write_var;
 
+
+	if (line != NULL)
+		free(line);
 	read = getline(&line, &len, fp);
 	if (isatty(STDIN_FILENO) == 1)
 	{
