@@ -7,57 +7,50 @@
  * Return: 1 on success.
  */
 
-int builtinchecker(char **toks)
+#define NUMBER_OF_BUILTINS 2
+
+// This is a list of the builtin functions. This list is in the static memory.
+// The NUMBER_OF_BUILTINS macro must be kept in sync with the number of functions
+// supported.
+builtins_t builtin[NUMBER_OF_BUILTINS] = { // Give me 8 bytes for a single point.
+	{"exit", _myexit},
+	{"env", _printenv},
+};
+
+enum builtins_exec_status builtinchecker(char **tokens)
 {
-	int status;
-	unsigned int num;
+	enum builtins_exec_status status;
 	unsigned int i;
 
-	builtins_t builtin[] = {
-		{"exit", _myexit},
-		{"env", _printenv},
-		{NULL, NULL},
-	};
+	char* firstToken = tokens[0];
 
-	if (toks[0] == NULL)
+	if (firstToken == NULL) {
+	  // The list of strings was empty, as the first string pointed to a null pointer.
 		return (0);
-	if (*toks[0] == '\0')
+	}
+
+	if (firstToken[0] == '\0') {
+		// The first string is empty.
 		return (0);
-	num = numbuilt(builtin);
-	for (i = 0; i < num; i++)
+	}
+
+	for (i = 0; i < NUMBER_OF_BUILTINS; i++)
 	{
-		if (_strcmp(*toks, builtin[i].option) == 0)
+		if (strcmp(firstToken, builtin[i].option) == 0)
 		{
 			status = (builtin[i].f)();
 			return (status);
 		}
 	}
-	return (0);
-
+	return ExecStatusNoop;
 }
-
-/**
- * numbuilt - counts the number of builtins
- * @builtin: builts to count
- * Return: number of builtins to iterate through
- */
-
-int numbuilt(builtins_t builtin[])
-{
-	unsigned int i;
-
-	for (i = 0; builtin[i].option != NULL; i++)
-		;
-	return (i);
-}
-
 
 /**
  * _printenv - prints the environ global variable
  * Return: 1 on success.
  */
 
-int _printenv(void)
+enum builtins_exec_status _printenv(void)
 {
 	int i;
 
@@ -66,7 +59,7 @@ int _printenv(void)
 		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
 		_putchar('\n');
 	}
-	return (1);
+	return ExecStatusSuccess;
 }
 
 /**
@@ -74,7 +67,9 @@ int _printenv(void)
  * Return: 0
  */
 
-int _myexit(void)
+enum builtins_exec_status _myexit(void)
 {
-	return (-1);
+	return ExecStatusExit;
 }
+
+#undef NUMBER_OF_BUILTINS
