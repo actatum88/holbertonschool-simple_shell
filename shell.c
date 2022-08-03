@@ -5,6 +5,8 @@
  * Return: 0
  */
 
+void *linereset(char *line);
+
 int main(void)
 {
 	char *line;
@@ -15,8 +17,7 @@ int main(void)
 
 	while (1)
 	{
-		if (line != NULL)
-			free(line);
+		/*line = linereset(line);*/
 		if (isatty(STDIN_FILENO) == 1)
 			write_var = write(1, "($) ", 4);
 		line = _getline(stdin);
@@ -31,6 +32,7 @@ int main(void)
 		{
 			free(line);
 			free(command);
+			line = NULL;
 		}
 		if (builtinrun == -1)
 		{
@@ -43,10 +45,14 @@ int main(void)
 			if (execute(command) == -1)
 			{
 				free(line);
+				line = NULL;
 				perror("Error");
 				exit(EXIT_FAILURE);
 			}
 		}
+		if (line != NULL)
+			free(line);
+		
 	}
 	return (0);
 }
@@ -132,6 +138,8 @@ char *_getline(FILE *fp)
 	(void)write_var;
 
 
+	if (line != NULL)
+		free(line);
 	read = getline(&line, &len, fp);
 	if (isatty(STDIN_FILENO) == 1)
 	{
@@ -152,4 +160,11 @@ char *_getline(FILE *fp)
 		}
 	}
 	return (line);
+}
+
+void *linereset(char *line)
+{
+	line = malloc(sizeof(char) * BUFFER);
+	free(line);
+	return (0);
 }
