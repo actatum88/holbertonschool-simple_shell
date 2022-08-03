@@ -5,8 +5,6 @@
  * Return: 0
  */
 
-void *linereset(char *line);
-
 int main(void)
 {
 	char *line;
@@ -160,11 +158,4 @@ char *_getline(FILE *fp)
 		}
 	}
 	return (line);
-}
-
-void *linereset(char *line)
-{
-	line = malloc(sizeof(char) * BUFFER);
-	free(line);
-	return (0);
 }
