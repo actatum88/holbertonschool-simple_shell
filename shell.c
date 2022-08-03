@@ -5,8 +5,6 @@
  * Return: 0
  */
 
-char **attytok(char *str);
-
 int main(void)
 {
 	char *line;

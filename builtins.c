@@ -38,7 +38,7 @@ enum builtins_exec_status builtinchecker(char **tokens)
 
 	for (i = 0; i < NUMBER_OF_BUILTINS; i++)
 	{
-		if (strcmp(firstToken, builtin[i].option) == 0)
+		if (_strcmp(firstToken, builtin[i].option) == 0)
 		{
 			status = (builtin[i].f)();
 			return (status);
@@ -62,11 +62,9 @@ enum builtins_exec_status _printenv(void)
 	{
 		write_var = write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
 		_putchar('\n');
-		return (0);
 	}
-	return ExecStatusSuccess;
+	return (ExecStatusSuccess);
 }
-
 /**
  * _myexit - exit function that returns 0 to break main.
  * Return: 0
@@ -74,7 +72,7 @@ enum builtins_exec_status _printenv(void)
 
 enum builtins_exec_status _myexit(void)
 {
-	return ExecStatusExit;
+	return (ExecStatusExit);
 }
 
 #undef NUMBER_OF_BUILTINS
